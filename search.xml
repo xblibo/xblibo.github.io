@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[Hello World]]></title>
-    <url>%2F2019%2F08%2F25%2Fhello-world%2F</url>
-    <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment Quick Start2abc 2.1 asssdfsdfsdfsd 2.2 爱的色放士大夫士大夫士大夫]]></content>
-  </entry>
-  <entry>
-    <title><![CDATA[CDN系统]]></title>
-    <url>%2F2019%2F08%2F11%2FCDN%E7%B3%BB%E7%BB%9F%2F</url>
-    <content type="text"></content>
+    <title><![CDATA[DNS系统]]></title>
+    <url>%2F2019%2F08%2F25%2FDNS%E7%B3%BB%E7%BB%9F%2F</url>
+    <content type="text"><![CDATA[DNS我们知道了域名解决了IP难以记忆的问题，但是机器只认识IP。要怎么把域名转换成机器认识的IP呢？DNS全称是Domain Name System，是互联往最核心的服务之一。它作为将域名和IP地址相互映射的一个分布式数据库，把域名解析成IP地址，能够使人更方便地访问互联网。 DNS协议域名解析过程 /etc/nsswitch.conf文件中配置host文件和系统dns的优先级 1hosts: files dns st=>start: 开始 e=>end: 结束 c1=>condition: 查询浏览器DNS Cache c2=>condition: 查询系统DNS Cache c3=>condition: 查询host文件的映射 c4=>condition: 查询本地DNS服务 c5=>condition: 迭代查询DNS服务 c6=>operation: 查询NetBIOS name Cache c7=>condition: 查询WINS 服务器 st->c1(no)->c2(no)->c3(no)->c4(no)->c5(no)->c6(right)->e c1(yes,right)->e c2(yes,right)->e c3(yes,right)->e c4(yes,right)->e c5(yes,right)->e{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12} var code = document.getElementById("flowchart-0-code").value; var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value)); var diagram = flowchart.parse(code); diagram.drawSVG("flowchart-0", options);]]></content>
       <categories>
         <category>网络</category>
       </categories>
@@ -17,9 +12,20 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[DNS系统]]></title>
-    <url>%2F2019%2F08%2F11%2FDNS%E7%B3%BB%E7%BB%9F%2F</url>
-    <content type="text"><![CDATA[域名域名（Domain names）是一串用点分割的字符组成的互联网上某一台计算机或某一组计算机的名称，用于数据传输是标志计算机器的方位，是互联网基础架构的关键部分。 域名作用我们知道网路是基于IP来传输的，为什么还需要域名呢?IPv4是由32位组成，通常写成四个范围在0~255以内，由点分隔的数字组成，比如173.194.121.32。IPv6是有128位组成，通常写成八组由冒号分隔的四个十六进制数组成，比如：fe80::b9a9:a905:5cd3:251e。计算机可以很容易地处理这些IP地址，但是对于人却很难记住哪个是baidu，哪个是淘宝。要怎么解决这个问题呢？计算机领域的问题没有什么不能加一层来解决，解决不了就加两层。于是定义出一种更适合人类记忆的有意义的名字来区分不同的服务，并把这个名字与IP对应起来。这样人记忆这个域名，然后计算机用IP来处理网络传输。 域名结构域名一般由两个或两个以上的词构成，中间用“.”进行分隔，其结构是：四级域名.三级域名.二级域名.一级域名。最右边的区域具有最高级别（顶级域名）。 域名只有由字母数字和-组成，不区分大小写。每一级域名长度的限制是63个字符，完整域名总长度则不能超过253个字符.不同的顶级域名托管商，有不同的域名格式规则。我们熟知的百度域名为：www.baidu.com，实际上他的真正域名是： www.baidu.com.. 最右边的.,也就是根域，com是顶级域，baidu是二级域，www则是主机名。从右至左逐级递减。最长可以有127级，每个域都有用一个域名服务器，管理则下属域名。 三级域/主机名 二级域 顶级域 根域 www .baidu .com . news .baidu .com . map .baidu .com . 各级域层级结构 graph TD id1[root] id1---id2[顶级域] id1---id3[com] id1---id4[org] id3---id6[二级域] id3---id7[baidu] id3---id8[taobao] id6---id9[三级域] id7---id10[www] id7---id11[news] id7---id12[map] 常见的顶级域名： com - 供商业机构使用 edu - 供教育机构使用 gov - 供政府及其属下机构使用 net - 供网络服务供应商使用 org - 供不属于其他通用顶级域类别的组织使用 DNSDNS全称是Domain Name System.我们知道了域名与IP是一一对应的。域名是为了方便人类记忆而产生的，但是机器只认识IP.怎么把域名转换成机器认识的IP呢？主要的功能就是将人易于记忆的域名与人不容易记忆的IP地址作转换 /etc/nsswitch.conf文件中配置host文件和系统dns的优先级 1hosts: files dns st=>start: 开始 e=>end: 结束 c1=>condition: 查询浏览器DNS Cache c2=>condition: 查询系统DNS Cache c3=>condition: 查询host文件的映射 c4=>condition: 查询本地DNS服务 c5=>condition: 迭代查询DNS服务 c6=>operation: 查询NetBIOS name Cache c7=>condition: 查询WINS 服务器 st->c1(no)->c2(no)->c3(no)->c4(no)->c5(no)->c6(right)->e c1(yes,right)->e c2(yes,right)->e c3(yes,right)->e c4(yes,right)->e c5(yes,right)->e{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12} var code = document.getElementById("flowchart-0-code").value; var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value)); var diagram = flowchart.parse(code); diagram.drawSVG("flowchart-0", options);]]></content>
+    <title><![CDATA[域名]]></title>
+    <url>%2F2019%2F08%2F25%2F%E5%9F%9F%E5%90%8D%2F</url>
+    <content type="text"><![CDATA[域名域名（Domain names）是一串用点分割的字符组成的互联网上某一台计算机或某一组计算机的名称，用于数据传输是标志计算机器的方位，是互联网基础架构的关键部分。 域名作用我们知道网路是基于IP来传输的，为什么还需要域名呢?IPv4是由32位组成，通常写成四个范围在0~255以内，由点分隔的数字组成，比如173.194.121.32。IPv6是有128位组成，通常写成八组由冒号分隔的四个十六进制数组成，比如：fe80::b9a9:a905:5cd3:251e。计算机可以很容易地处理这些IP地址，但是对于人却很难记住哪个是baidu，哪个是taobao。要怎么解决这个问题呢？计算机领域的问题没有什么不能加一层来解决，解决不了就加两层。于是定义出一种更适合人类记忆的有意义的名字来区分不同的服务，并把这个名字与IP对应起来。这样人记忆这个域名，然后计算机用IP来处理网络传输。 域名结构域名一般由两个或两个以上的词构成，中间用“.”进行分隔，其结构是：四级域.三级域.二级域.顶级域.根域。最右边的区域具有最高级别（顶级域名）。 域名只有由字母数字和-组成，不区分大小写。每一级域名长度的限制是63个字符，完整域名总长度则不能超过253个字符.不同的顶级域名托管商，有不同的域名格式规则。我们熟知的百度域名为：www.baidu.com，实际上他的真正域名是： www.baidu.com.root。 最右边的root,也就是根域(根域对所有域名都是一样，所以平时省略)，com是顶级域，baidu是二级域，www则是主机名。从右至左逐级递减。最长可以有127级，每个域都有用一个域名服务器，管理则下属域名。 三级域/主机名 二级域 顶级域 根域 www .baidu .com . news .baidu .com . map .baidu .com . 各级域层级结构 graph TD id1[root] id1---id2[顶级域] id1---id4[net] id1---id5[org] id1---id3[com] id2---id6[二级域] id3---id8[qq] id3---id7[baidu] id3---id9[taobao] id6---id10[三级域] id7---id11[www] id7---id12[news] id7---id13[map] 常见的顶级域名： com - 供商业机构使用 edu - 供教育机构使用 gov - 供政府及其属下机构使用 net - 供网络服务供应商使用 org - 供不属于其他通用顶级域类别的组织使用]]></content>
+      <categories>
+        <category>互联网</category>
+      </categories>
+      <tags>
+        <tag>互联网 网络基础</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[CDN系统]]></title>
+    <url>%2F2019%2F08%2F11%2FCDN%E7%B3%BB%E7%BB%9F%2F</url>
+    <content type="text"></content>
       <categories>
         <category>网络</category>
       </categories>
