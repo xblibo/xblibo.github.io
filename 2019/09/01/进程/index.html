@@ -72,7 +72,7 @@
 <meta property="og:description" content="进程的概念进程是一个具有一定独立功能的程序在一个数据集上的一次动态执行的过程，是应用程序运行的载体，是操作系统进行资源分配和调度的基本单位，是操作系统结构的基础。同时也是线程的容器（通常一个进程包含若干个线程）。进程是一种抽象的概念。进程一般由程序，数据集合和进程控制块(PCB)三部分组成。程序用于描述进程要完成的功能，是控制进程执行的指令集；数据集合是程序在执行时所需要的数据和工作区；程序控制块">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://xblibo.com/2019/09/01/进程/process.jpg">
-<meta property="og:updated_time" content="2019-09-07T00:31:07.147Z">
+<meta property="og:updated_time" content="2019-09-07T02:32:32.960Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="进程">
 <meta name="twitter:description" content="进程的概念进程是一个具有一定独立功能的程序在一个数据集上的一次动态执行的过程，是应用程序运行的载体，是操作系统进行资源分配和调度的基本单位，是操作系统结构的基础。同时也是线程的容器（通常一个进程包含若干个线程）。进程是一种抽象的概念。进程一般由程序，数据集合和进程控制块(PCB)三部分组成。程序用于描述进程要完成的功能，是控制进程执行的指令集；数据集合是程序在执行时所需要的数据和工作区；程序控制块">
@@ -281,7 +281,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-09-07 08:31:07" itemprop="dateModified" datetime="2019-09-07T08:31:07+08:00">2019-09-07</time>
+                <time title="修改时间：2019-09-07 10:32:32" itemprop="dateModified" datetime="2019-09-07T10:32:32+08:00">2019-09-07</time>
               </span>
             
           
@@ -318,7 +318,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span title="本文字数">1.6k</span>
+              <span title="本文字数">2.9k</span>
             </span>
           
             <span class="post-meta-item">
@@ -328,7 +328,7 @@
               
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               
-              <span title="阅读时长">1 分钟</span>
+              <span title="阅读时长">3 分钟</span>
             </span>
           
 
@@ -425,6 +425,19 @@
 </tr>
 </tbody></table>
 <p><em>进程运行中状态切换图</em><br><img src="/2019/09/01/进程/process.jpg" alt="进程状态流转图"></p>
+<h2 id="进程的调度"><a href="#进程的调度" class="headerlink" title="进程的调度"></a>进程的调度</h2><p>进程调度是操作系统资源分配。有限的资源要合理高效的分配给多个进程，确保充分的利用计算机各个资源部件。</p>
+<p>常见的进程调度算法：</p>
+<h3 id="先来先去服务-FCFS"><a href="#先来先去服务-FCFS" class="headerlink" title="先来先去服务(FCFS)"></a>先来先去服务(FCFS)</h3><p>先来先去服务(FCFS)调度算法是从就绪队列中选择一个最先进入该队列的进程分配CPU运行。直到完成或发生某事件而阻塞时，才释放CPU</p>
+<p>优缺点：FCFS调度算法的特点是算法简单。但效率低，对长作业比较有利，但对短作业不利（相对SJF和高响应比）；有利于CPU繁忙型作业，而不利于I/O繁忙型作业。</p>
+<h3 id="短作业优先"><a href="#短作业优先" class="headerlink" title="短作业优先"></a>短作业优先</h3><p>短作业优先(SJF)调度算法是从就绪队列中选择一个估计运行时间最短的进程分配CPU运行，直到完成或发生某事件而阻塞时，才释放CPU。</p>
+<p>优缺点：SJF平均等待时间和周转时间短。但需要事先预知作业的运行时间，对长作业非常不利，未考虑紧迫程度，因此不能保证紧迫性作业得到及时解决，采用短作业优先调度算法无法实现人机交互。</p>
+<h3 id="优先级调度算法"><a href="#优先级调度算法" class="headerlink" title="优先级调度算法"></a>优先级调度算法</h3><p>优先级调度算法中的优先级用于描述作业运行的紧迫程度,该算法从就绪队列中选择优先级最髙的进程分配CPU运行。</p>
+<h4 id="非抢占式优先级调度算法"><a href="#非抢占式优先级调度算法" class="headerlink" title="非抢占式优先级调度算法"></a>非抢占式优先级调度算法</h4><p>系统把CPU分配给就绪队列中优先权最高的进程执行后，直到完成或发生某事件而阻塞时，才释放CPU。系统方可再将CPU重新分配给另一优先权最高的进程。这种调度算法主要用于批处理系统中；也可用于某些对实时性要求不严的实时系统中。</p>
+<h4 id="抢占式优先级调度算法"><a href="#抢占式优先级调度算法" class="headerlink" title="抢占式优先级调度算法"></a>抢占式优先级调度算法</h4><p>系统把CPU分配给就绪队列中优先权最高的进程执行后，在其执行期间，只要又出现了另一个其优先权更高的进程，进程调度程序就立即停止当前进程(原优先权最高的进程)的执行，重新将CPU分配给新到的优先权最高的进程。这种抢占式的优先权调度算法能更好地满足紧迫作业的要求，故而常用于要求比较严格的实时系统中，以及对性能要求较高的批处理和分时系统中。</p>
+<h4 id="高响应比优先调度算法"><a href="#高响应比优先调度算法" class="headerlink" title="高响应比优先调度算法"></a>高响应比优先调度算法</h4><p>高响应比优先调度算法主要用于作业调度，该算法是对FCFS调度算法和SJF调度算法的一种综合平衡，同时考虑每个作业的等待时间和估计的运行时间。在每次进行作业调度时，先计算后备作业队列中每个作业的响应比，从中选出响应比最高的作业投入运行。</p>
+<p> $$ 优先级 = \dfrac{等待时间 + 预计运行时间}{预计运行时间} $$</p>
+<h3 id="时间片的轮转调度算法"><a href="#时间片的轮转调度算法" class="headerlink" title="时间片的轮转调度算法"></a>时间片的轮转调度算法</h3><p>时间片轮转调度算法主要适用于分时系统。在这种算法中，系统将所有就绪进程按到达时间的先后次序排成一个队列，进程调度程序总是选择就绪队列中第一个进程执行，即先来先服务的原则，但仅能运行一个时间片，如100ms。在使用完一个时间片后，即使进程并未完成其运行，它也必须释放出（被剥夺）处理机给下一个就绪的进程，而被剥夺的进程返回到就绪队列的末尾重新排队，等候再次运行。</p>
+<h3 id="多级反馈队列调度算法"><a href="#多级反馈队列调度算法" class="headerlink" title="多级反馈队列调度算法"></a>多级反馈队列调度算法</h3><p>多级反馈队列调度算法是时间片轮转调度算法和优先级调度算法的综合和发展，通过动态调整进程优先级和时间片大小，多级反馈队列调度算法可以兼顾多方面的系统目标。例如，为提高系统吞吐量和缩短平均周转时间而照顾短进程；为获得较好的I/O设备利用率和缩短响应时间而照顾I/O型进程；同时，也不必事先估计进程的执行时间。</p>
 
     </div>
 
@@ -579,7 +592,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#进程的概念"><span class="nav-number">1.</span> <span class="nav-text">进程的概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程的创建"><span class="nav-number">2.</span> <span class="nav-text">进程的创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程的销毁"><span class="nav-number">3.</span> <span class="nav-text">进程的销毁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程的状态"><span class="nav-number">4.</span> <span class="nav-text">进程的状态</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#进程的概念"><span class="nav-number">1.</span> <span class="nav-text">进程的概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程的创建"><span class="nav-number">2.</span> <span class="nav-text">进程的创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程的销毁"><span class="nav-number">3.</span> <span class="nav-text">进程的销毁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程的状态"><span class="nav-number">4.</span> <span class="nav-text">进程的状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程的调度"><span class="nav-number">5.</span> <span class="nav-text">进程的调度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#先来先去服务-FCFS"><span class="nav-number">5.1.</span> <span class="nav-text">先来先去服务(FCFS)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#短作业优先"><span class="nav-number">5.2.</span> <span class="nav-text">短作业优先</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优先级调度算法"><span class="nav-number">5.3.</span> <span class="nav-text">优先级调度算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#非抢占式优先级调度算法"><span class="nav-number">5.3.1.</span> <span class="nav-text">非抢占式优先级调度算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#抢占式优先级调度算法"><span class="nav-number">5.3.2.</span> <span class="nav-text">抢占式优先级调度算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#高响应比优先调度算法"><span class="nav-number">5.3.3.</span> <span class="nav-text">高响应比优先调度算法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#时间片的轮转调度算法"><span class="nav-number">5.4.</span> <span class="nav-text">时间片的轮转调度算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多级反馈队列调度算法"><span class="nav-number">5.5.</span> <span class="nav-text">多级反馈队列调度算法</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -615,14 +628,14 @@
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
     
-    <span title="站点总字数">4k</span>
+    <span title="站点总字数">5k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
     
-    <span title="站点阅读时长">3 分钟</span>
+    <span title="站点阅读时长">4 分钟</span>
 </div>
 
         
