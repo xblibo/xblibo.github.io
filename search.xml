@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[进程]]></title>
+    <url>%2F2019%2F09%2F01%2F%E8%BF%9B%E7%A8%8B%2F</url>
+    <content type="text"><![CDATA[进程的概念进程是一个具有一定独立功能的程序在一个数据集上的一次动态执行的过程，是应用程序运行的载体，是操作系统进行资源分配和调度的基本单位，是操作系统结构的基础。同时也是线程的容器（通常一个进程包含若干个线程）。进程是一种抽象的概念。进程一般由程序，数据集合和进程控制块(PCB)三部分组成。程序用于描述进程要完成的功能，是控制进程执行的指令集；数据集合是程序在执行时所需要的数据和工作区；程序控制块包含进程的描述信息和控制信息是进程存在的唯一标志。 进程的创建Linux的进程创建是通过系统调用fork,vfork,clone来完成的，vfork创建出来的是轻量级进程（线程）。而他们又用各自的参数标志去调用_do_fork()函数完成进程的创建工作，以下是具体执行流程： copy_process是将父进程的运行环境复制到子进程，并对特定的信息做响应的调整 dup_task_struct: 分配复制父进程task_struct, 分配内核栈 sched_fork: 设置子进程调度相关的参数，即子进程的运行CPU、初始时间片长度和静态优先级等 copy_semundo: 复制父进程的semaphore undo_list到子进程 copy_files、copy_fs: 复制父进程文件系统相关的环境到子进程 copy_sighand、copy_signal: 复制父进程信号处理相关的环境到子进程 copy_mm: 复制父进程内存管理相关的环境到子进程，包括页表、地址空间、代码、数据等。vfork创建的线程不复制，直接用父进程mm_struct. copy_namespace: 复制命名空间 copy_io: 复制父进程io上下文 copy_thread_tls: 设置子进程的执行环境，如子进程运行时各CPU寄存器的值、子进程的kernel栈的起始地址 wake_up_new_task将子进程加入到调度队列中 设置进程状态为TASK_RUNNING 设置合适的CPU，并加进程加入CPU调度队列 如果是vfork，将父进程加入等待队列 从上述执行流程我们可以看出，进程是又父进程复制出来，然后不断修改自己的私有信息的过程。因为在创建的过程中大部分复杂的数据结构都通过slab分配器来分配内存空间并直接将父进程已经结构化好的数据存储进去，没有其他系统那样的逐项初始化的过程， 所以Linux系统在进程管理方面要累量高效。想要了解更多细节可以查阅 源码入口 进程的销毁进程的销毁是通过系统调用exit来完成的。以下是具体执行流程： exit_itimers: 退出计时器队列 exit_signals: 设置PF_EXITING标志来表明进程正在退出，清除所有信号处理函数 exit_mm: 释放地址空间 exit_files、 exit_fs: 关闭所有打开的文件描述符，清理IO缓存。清除相关的inode exit_thread: 释放thread_info描述符和内核堆栈 exit_io_context: 清除IO上下文 do_task_dead: 设置销毁标志，调度新进程,并在调度新进程中最后释放task_struct的地址 进程的状态 状态 描述 TASK_NEW 初始状态，进程刚被创建是的状态 TASK_RUNNING 可执行状态，正在执行或在就绪队列中 TASK_INTERRUPTIBLE 可中断睡眠，表示进程因为等待某个事件而被系统挂起 TASK_UNINTERRUPTIBLE 不可中断睡眠，一般表示进程正在跟硬件交互，并且交互过程不允许被其他进程或中断打断 TASK_STOPPED 挂起状态，主要用于调试目的 TASK_TRACED 跟踪状态， EXIT_ZOMBIE 僵尸态，进程已经结束运行，但是进程控制块尚未注销 TASK_DEAD 退出状态 TASK_IDLE 空闲状态 更多状态请查看: 进程状态 进程运行中状态切换图]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统 linux进程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[DNS系统]]></title>
     <url>%2F2019%2F08%2F25%2FDNS%E7%B3%BB%E7%BB%9F%2F</url>
     <content type="text"><![CDATA[DNS我们知道了域名解决了IP难以记忆的问题，但是机器只认识IP。要怎么把域名转换成机器认识的IP呢？DNS全称是Domain Name System，是互联往最核心的服务之一。它作为将域名和IP地址相互映射的一个分布式数据库，把域名解析成IP地址，能够使人更方便地访问互联网。 DNS协议域名解析过程 /etc/nsswitch.conf文件中配置host文件和系统dns的优先级 1hosts: files dns st=>start: 开始 e=>end: 结束 c1=>condition: 查询浏览器DNS Cache c2=>condition: 查询系统DNS Cache c3=>condition: 查询host文件的映射 c4=>condition: 查询本地DNS服务 c5=>condition: 迭代查询DNS服务 c6=>operation: 查询NetBIOS name Cache c7=>condition: 查询WINS 服务器 st->c1(no)->c2(no)->c3(no)->c4(no)->c5(no)->c6(right)->e c1(yes,right)->e c2(yes,right)->e c3(yes,right)->e c4(yes,right)->e c5(yes,right)->e{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12} var code = document.getElementById("flowchart-0-code").value; var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value)); var diagram = flowchart.parse(code); diagram.drawSVG("flowchart-0", options);]]></content>
