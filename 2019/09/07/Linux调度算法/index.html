@@ -63,21 +63,19 @@
   };
 </script>
 
-  <meta name="description" content="进程的概念进程是一个具有一定独立功能的程序在一个数据集上的一次动态执行的过程，是应用程序运行的载体，是操作系统进行资源分配和调度的基本单位，是操作系统结构的基础。同时也是线程的容器（通常一个进程包含若干个线程）。进程是一种抽象的概念。进程一般由程序，数据集合和进程控制块(PCB)三部分组成。程序用于描述进程要完成的功能，是控制进程执行的指令集；数据集合是程序在执行时所需要的数据和工作区；程序控制块">
+  <meta name="description" content="Linux调度器Linux 2.4内核提供了基于时间片轮转的动态优先级调度算法。多个CPU共享一个就绪队列，基于epoch分配时间片，每次调度需要迭代整个就绪队列，选择出优先级最高的进程运行。调度过程中的迭代时间复杂度为O(N)，又称为O(N)调度器。 Linux 2.6早期版本通过优化的数据结构解决了O(N)的问题。每个cpu维护一个运行队列，扩展性更好。支持静态优先级和动态优先级。静态优先级用">
 <meta name="keywords" content="操作系统 linux进程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="进程">
-<meta property="og:url" content="http://xblibo.com/2019/09/01/进程/index.html">
+<meta property="og:title" content="Linux调度算法">
+<meta property="og:url" content="http://xblibo.com/2019/09/07/Linux调度算法/index.html">
 <meta property="og:site_name" content="xblibo&#39;s博客">
-<meta property="og:description" content="进程的概念进程是一个具有一定独立功能的程序在一个数据集上的一次动态执行的过程，是应用程序运行的载体，是操作系统进行资源分配和调度的基本单位，是操作系统结构的基础。同时也是线程的容器（通常一个进程包含若干个线程）。进程是一种抽象的概念。进程一般由程序，数据集合和进程控制块(PCB)三部分组成。程序用于描述进程要完成的功能，是控制进程执行的指令集；数据集合是程序在执行时所需要的数据和工作区；程序控制块">
+<meta property="og:description" content="Linux调度器Linux 2.4内核提供了基于时间片轮转的动态优先级调度算法。多个CPU共享一个就绪队列，基于epoch分配时间片，每次调度需要迭代整个就绪队列，选择出优先级最高的进程运行。调度过程中的迭代时间复杂度为O(N)，又称为O(N)调度器。 Linux 2.6早期版本通过优化的数据结构解决了O(N)的问题。每个cpu维护一个运行队列，扩展性更好。支持静态优先级和动态优先级。静态优先级用">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://xblibo.com/2019/09/01/进程/process.jpg">
-<meta property="og:updated_time" content="2019-09-07T13:06:48.332Z">
+<meta property="og:updated_time" content="2019-09-13T15:17:44.473Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="进程">
-<meta name="twitter:description" content="进程的概念进程是一个具有一定独立功能的程序在一个数据集上的一次动态执行的过程，是应用程序运行的载体，是操作系统进行资源分配和调度的基本单位，是操作系统结构的基础。同时也是线程的容器（通常一个进程包含若干个线程）。进程是一种抽象的概念。进程一般由程序，数据集合和进程控制块(PCB)三部分组成。程序用于描述进程要完成的功能，是控制进程执行的指令集；数据集合是程序在执行时所需要的数据和工作区；程序控制块">
-<meta name="twitter:image" content="http://xblibo.com/2019/09/01/进程/process.jpg">
-  <link rel="canonical" href="http://xblibo.com/2019/09/01/进程/">
+<meta name="twitter:title" content="Linux调度算法">
+<meta name="twitter:description" content="Linux调度器Linux 2.4内核提供了基于时间片轮转的动态优先级调度算法。多个CPU共享一个就绪队列，基于epoch分配时间片，每次调度需要迭代整个就绪队列，选择出优先级最高的进程运行。调度过程中的迭代时间复杂度为O(N)，又称为O(N)调度器。 Linux 2.6早期版本通过优化的数据结构解决了O(N)的问题。每个cpu维护一个运行队列，扩展性更好。支持静态优先级和动态优先级。静态优先级用">
+  <link rel="canonical" href="http://xblibo.com/2019/09/07/Linux调度算法/">
 
 
 <script id="page.configurations">
@@ -86,7 +84,7 @@
   };
 </script>
 
-  <title>进程 | xblibo's博客</title>
+  <title>Linux调度算法 | xblibo's博客</title>
   
 
 
@@ -234,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://xblibo.com/2019/09/01/进程/">
+    <link itemprop="mainEntityOfPage" href="http://xblibo.com/2019/09/07/Linux调度算法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="xblibo">
@@ -248,7 +246,7 @@
       <header class="post-header">
 
         
-          <h1 class="post-title" itemprop="name headline">进程
+          <h1 class="post-title" itemprop="name headline">Linux调度算法
 
               
             
@@ -268,7 +266,7 @@
                 
               
 
-              <time title="创建时间：2019-09-01 20:50:28" itemprop="dateCreated datePublished" datetime="2019-09-01T20:50:28+08:00">2019-09-01</time>
+              <time title="创建时间：2019-09-07 21:43:56" itemprop="dateCreated datePublished" datetime="2019-09-07T21:43:56+08:00">2019-09-07</time>
             </span>
           
             
@@ -281,7 +279,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-09-07 21:06:48" itemprop="dateModified" datetime="2019-09-07T21:06:48+08:00">2019-09-07</time>
+                <time title="修改时间：2019-09-13 23:17:44" itemprop="dateModified" datetime="2019-09-13T23:17:44+08:00">2019-09-13</time>
               </span>
             
           
@@ -318,7 +316,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span title="本文字数">1.6k</span>
+              <span title="本文字数">2.1k</span>
             </span>
           
             <span class="post-meta-item">
@@ -328,7 +326,7 @@
               
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               
-              <span title="阅读时长">1 分钟</span>
+              <span title="阅读时长">2 分钟</span>
             </span>
           
 
@@ -341,90 +339,75 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="进程的概念"><a href="#进程的概念" class="headerlink" title="进程的概念"></a>进程的概念</h2><p>进程是一个具有一定独立功能的程序在一个数据集上的一次动态执行的过程，是应用程序运行的载体，是操作系统进行资源分配和调度的基本单位，是操作系统结构的基础。同时也是线程的容器（通常一个进程包含若干个线程）。<br>进程是一种抽象的概念。进程一般由程序，数据集合和进程控制块(PCB)三部分组成。程序用于描述进程要完成的功能，是控制进程执行的指令集；数据集合是程序在执行时所需要的数据和工作区；程序控制块包含进程的描述信息和控制信息是进程存在的唯一标志。</p>
+        <h2 id="Linux调度器"><a href="#Linux调度器" class="headerlink" title="Linux调度器"></a>Linux调度器</h2><p>Linux 2.4内核提供了基于时间片轮转的动态优先级调度算法。多个CPU共享一个就绪队列，基于epoch分配时间片，每次调度需要迭代整个就绪队列，选择出优先级最高的进程运行。调度过程中的迭代时间复杂度为O(N)，又称为O(N)调度器。</p>
+<p>Linux 2.6早期版本通过优化的数据结构解决了O(N)的问题。每个cpu维护一个运行队列，扩展性更好。支持静态优先级和动态优先级。静态优先级用来计算进程运行时间片，动态优先级用来计算调度先后。因为其算法复杂度为O(1), 又称为O(1)调度器。</p>
+<p>Linux 2.6.26提供了一个公平的调度器，根据计算进程的消耗了CPU的时间大小来决定调度。每个进程维护一个虚拟时钟vruntime，调度器每次选vruntime最小的进程来运行。优先级高的进程vruntime增长得慢，从而有更多的执行机会。因为调度器总是选择消耗CPU时间最小的进程来运行，从而达到公平性，所以又称为完全公平(CFS)调度器。</p>
 <a id="more"></a>
 
-<h2 id="进程的创建"><a href="#进程的创建" class="headerlink" title="进程的创建"></a>进程的创建</h2><p>Linux的进程创建是通过系统调用fork,vfork,clone来完成的，vfork创建出来的是轻量级进程（线程）。而他们又用各自的参数标志去调用_do_fork()函数完成进程的创建工作，以下是具体执行流程：</p>
+<h2 id="O-1-调度器"><a href="#O-1-调度器" class="headerlink" title="O(1)调度器"></a>O(1)调度器</h2><h3 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h3><p>Linux进程有个nice值是用来控制优先级的因子,nice值的取值范围是-20~19，值越低优先级越高。O(1)调度器的优先级分为静态优先级和动态优先级。实时进程优先级0-99，普通进程优先级100-139。实时进程只有静态优先级(0-99)，创建后不能变更了。普通进程的动态优先级是根据静态优先级和进程睡眠时间来计算的出来的。</p>
+<h3 id="时间片"><a href="#时间片" class="headerlink" title="时间片"></a>时间片</h3><blockquote>
+<p>优先级&lt;120，时间片=max((140-优先级)<em>20, MIN_TIMESLICE)<br>优先级&gt;=120，时间片=max((140-优先级)</em>5, MIN_TIMESLICE)</p>
+</blockquote>
+<p>优先级越高(值越小)，则分配的时间片越多</p>
+<h3 id="调度流程"><a href="#调度流程" class="headerlink" title="调度流程"></a>调度流程</h3><p>每个cpu维护一个运行队列，运行队列中包含active数组与expried数组。数组长度等于优先级个数(140). 每个优先级对应一个进程链表，存放到数组对应的下标里，并通过bitmap来标志对应的优先级是否有就绪进程。调度器每次从active数组中取出优先级别最高进程去执行，利用优先级位图从高到低找到第一个被设置的位,从该位对应的进程链表中取头进程。普通进程需要递减时间片，当时间片用完时把进程移动到expried数组对应的优先级链表中。当active数组空了，则交换active和expried，重复上述流程。</p>
+<h2 id="CFS调度器"><a href="#CFS调度器" class="headerlink" title="CFS调度器"></a>CFS调度器</h2><h3 id="优先级-1"><a href="#优先级-1" class="headerlink" title="优先级"></a>优先级</h3><p>进程维护一个虚拟时钟vruntime，调度器每次选择vruntime值最小的进程执行。vruntime时一个虚拟的运行时间，是实际运行时间根据进程权重放大或缩小的值。所以优先级，就是进程的权重。</p>
+<blockquote>
+<p>虚拟运行时间 += 实际执行时间 * 1024 / 进程权重<br><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/sched/core.c#L7056" target="_blank" rel="noopener">进程NICE值对应的权重</a></p>
+</blockquote>
+<p>虚拟运行时间的增长速度与进程的权重成反比，优先级越高进程权重越大，则增长速度越慢。</p>
+<h3 id="时间片-1"><a href="#时间片-1" class="headerlink" title="时间片"></a>时间片</h3><blockquote>
+<p>运行片 = 调度周期 * 进程权重 / 所有进程权重之和</p>
+</blockquote>
+<p>分配的时间片与进程权重成正比，优先级越高，时间片也越多</p>
+<h3 id="调度流程-1"><a href="#调度流程-1" class="headerlink" title="调度流程"></a>调度流程</h3><p>CFS调度流程主要分两大步骤，一是更新统计上一个进程的执行时间，二是挑选vruntime低的进程执行。</p>
+<p>一. <a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/time/tick-common.c#L103" target="_blank" rel="noopener">时钟中断处理</a>最终会调用<a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/sched/core.c#L3023" target="_blank" rel="noopener">scheduler_tick</a>，然后根据sched_class调用cfs的实现方法<a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/sched/fair.c#L10233" target="_blank" rel="noopener">task_tick_fair</a>。该函数的执行流程：</p>
 <ol>
-<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/fork.c#L1742" target="_blank" rel="noopener">copy_process</a>是将父进程的运行环境复制到子进程，并对特定的信息做响应的调整<ul>
-<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/fork.c#L843" target="_blank" rel="noopener">dup_task_struct</a>: 分配复制父进程task_struct, 分配内核栈</li>
-<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/sched/core.c#L2286" target="_blank" rel="noopener">sched_fork</a>: 设置子进程调度相关的参数，即子进程的运行CPU、初始时间片长度和静态优先级等</li>
-<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/ipc/sem.c#L2268" target="_blank" rel="noopener">copy_semundo</a>: 复制父进程的semaphore undo_list到子进程</li>
-<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/fork.c#L1434" target="_blank" rel="noopener">copy_files</a>、<a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/fork.c#L1414" target="_blank" rel="noopener">copy_fs</a>: 复制父进程文件系统相关的环境到子进程</li>
-<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/fork.c#L1487" target="_blank" rel="noopener">copy_sighand</a>、<a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/fork.c#L1542" target="_blank" rel="noopener">copy_signal</a>: 复制父进程信号处理相关的环境到子进程</li>
-<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/fork.c#L1367" target="_blank" rel="noopener">copy_mm</a>: 复制父进程内存管理相关的环境到子进程，包括页表、地址空间、代码、数据等。vfork创建的线程不复制，直接用父进程mm_struct.</li>
-<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/nsproxy.c#L134" target="_blank" rel="noopener">copy_namespace</a>: 复制命名空间</li>
-<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/fork.c#L1461" target="_blank" rel="noopener">copy_io</a>: 复制父进程io上下文</li>
-<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/arch/x86/kernel/process_64.c#L384" target="_blank" rel="noopener">copy_thread_tls</a>: 设置子进程的执行环境，如子进程运行时各CPU寄存器的值、子进程的kernel栈的起始地址</li>
+<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/sched/fair.c#L4254" target="_blank" rel="noopener">entity_tick</a>:<ul>
+<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/sched/fair.c#L815" target="_blank" rel="noopener">update_curr</a>: 更新进程各种统计数据<ul>
+<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/sched/fair.c#L643" target="_blank" rel="noopener">calc_delta_fair</a>: 计算进程vruntime的增长值</li>
+<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/sched/fair.c#L511" target="_blank" rel="noopener">update_min_vruntime</a>: 更新当前cpu最小虚拟运行时间</li>
 </ul>
 </li>
-<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/sched/core.c#L2388" target="_blank" rel="noopener">wake_up_new_task</a>将子进程加入到调度队列中<ul>
-<li>设置进程状态为TASK_RUNNING</li>
-<li>设置合适的CPU，并加进程加入CPU调度队列</li>
-<li>如果是vfork，将父进程加入等待队列</li>
+<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/sched/fair.c#L3572" target="_blank" rel="noopener">update_load_avg</a>: 更新CPU负载</li>
+<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/sched/fair.c#L4098" target="_blank" rel="noopener">check_preempt_tick</a>: 检查进程是否需要再次被调度<ul>
+<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/sched/fair.c#L673" target="_blank" rel="noopener">sched_slice</a>:计算当前进程的理想执行时间<blockquote>
+<p>idealtime =  slice * 进程权重 / 运行队列总权重<br>进程数&lt;=8时：slice= 进程数 * 0.75ms<br>进程数 &gt;8时： slice = 6ms</p>
+</blockquote>
+</li>
+<li>判断进程当前周期的时间片是否用完，用完则设置resched标记</li>
+</ul>
+</li>
 </ul>
 </li>
 </ol>
-<p>从上述执行流程我们可以看出，进程是又父进程复制出来，然后不断修改自己的私有信息的过程。因为在创建的过程中大部分复杂的数据结构都通过slab分配器来分配内存空间并直接将父进程已经结构化好的数据存储进去，没有其他系统那样的逐项初始化的过程， 所以Linux系统在进程管理方面要累量高效。想要了解更多细节可以查阅 <a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/fork.c#L2321" target="_blank" rel="noopener">源码入口</a></p>
-<h2 id="进程的销毁"><a href="#进程的销毁" class="headerlink" title="进程的销毁"></a>进程的销毁</h2><p>进程的销毁是通过系统调用exit来完成的。以下是具体执行流程：</p>
+<p>二. 中断程序执行结束会执行<a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/sched/core.c#L3502" target="_blank" rel="noopener">schedule</a>，该函数执行流程:</p>
 <ol>
-<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/time/posix-timers.c#L1007" target="_blank" rel="noopener">exit_itimers</a>: 退出计时器队列</li>
-<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/signal.c#L2760" target="_blank" rel="noopener">exit_signals</a>: 设置PF_EXITING标志来表明进程正在退出，清除所有信号处理函数</li>
-<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/exit.c#L497" target="_blank" rel="noopener">exit_mm</a>: 释放地址空间</li>
-<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/fs/file.c#L437" target="_blank" rel="noopener">exit_files</a>、 <a href="https://elixir.bootlin.com/linux/v5.2.11/source/fs/fs_struct.c#L95" target="_blank" rel="noopener">exit_fs</a>: 关闭所有打开的文件描述符，清理IO缓存。清除相关的inode</li>
-<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/arch/x86/kernel/process.c#L110" target="_blank" rel="noopener">exit_thread</a>: 释放thread_info描述符和内核堆栈</li>
-<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/block/blk-ioc.c#L198" target="_blank" rel="noopener">exit_io_context</a>: 清除IO上下文</li>
-<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/sched/core.c#L3454" target="_blank" rel="noopener">do_task_dead</a>: 设置销毁标志，调度新进程,并在调度新进程中最后释放task_struct的地址</li>
+<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/sched/core.c#L3470" target="_blank" rel="noopener">sched_submit_work</a>: 检查进程状态和死锁检查器，刷新plug队列避免死锁</li>
+<li>循环执行<a href="https://elixir.bootlin.com/linux/v5.2.11/ident/__schedule" target="_blank" rel="noopener">__schedule</a><ul>
+<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/rcu/tree_plugin.h#L305" target="_blank" rel="noopener">rcu_note_context_switch</a>更新全局状态，标识当前CPU发生上下文的切换</li>
+<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/sched/core.c#L3290" target="_blank" rel="noopener">pick_next_task</a>: 挑选优先级最高的进程<ul>
+<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/sched/fair.c#L7025" target="_blank" rel="noopener">pick_next_task_fair</a><ul>
+<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/sched/fair.c#L4177" target="_blank" rel="noopener">pick_next_entity</a>：获取vruntime最小的进程</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/sched/core.c#L2778" target="_blank" rel="noopener">context-switch</a>: 进程上下文切换<ul>
+<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/sched/core.c#L2597" target="_blank" rel="noopener">prepare_task_switch</a>:上下文切换准备工作</li>
+<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/arch/x86/mm/tlb.c#L275" target="_blank" rel="noopener">switch_mm_irqs_off</a>: 切换页表</li>
+<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/include/asm-generic/switch_to.h#L21" target="_blank" rel="noopener">switch_to</a>: 切换到新进程状态<ul>
+<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/arch/x86/um/tls_32.c#L92" target="_blank" rel="noopener">load_TLS</a>: 加载新进程进程执行环境，如子进程运行时各CPU寄存器的值、子进程的kernel栈的起始地址</li>
+<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/arch/x86/kernel/process.h#L13" target="_blank" rel="noopener">switch_to_extra</a></li>
+<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/arch/x86/include/asm/switch_to.h#L88" target="_blank" rel="noopener">update_task_stack</a>: 更新进程内核栈</li>
+<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/arch/x86/include/asm/switch_to.h#L76" target="_blank" rel="noopener">refresh_sysenter_cs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/sched/core.c#L3496" target="_blank" rel="noopener">sched_update_worker</a></li>
 </ol>
-<h2 id="进程的状态"><a href="#进程的状态" class="headerlink" title="进程的状态"></a>进程的状态</h2><table>
-<thead>
-<tr>
-<th align="left">状态</th>
-<th align="center">描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">TASK_NEW</td>
-<td align="center">初始状态，进程刚被创建是的状态</td>
-</tr>
-<tr>
-<td align="left">TASK_RUNNING</td>
-<td align="center">可执行状态，正在执行或在就绪队列中</td>
-</tr>
-<tr>
-<td align="left">TASK_INTERRUPTIBLE</td>
-<td align="center">可中断睡眠，表示进程因为等待某个事件而被系统挂起</td>
-</tr>
-<tr>
-<td align="left">TASK_UNINTERRUPTIBLE</td>
-<td align="center">不可中断睡眠，一般表示进程正在跟硬件交互，并且交互过程不允许被其他进程或中断打断</td>
-</tr>
-<tr>
-<td align="left">TASK_STOPPED</td>
-<td align="center">挂起状态，主要用于调试目的</td>
-</tr>
-<tr>
-<td align="left">TASK_TRACED</td>
-<td align="center">跟踪状态，</td>
-</tr>
-<tr>
-<td align="left">EXIT_ZOMBIE</td>
-<td align="center">僵尸态，进程已经结束运行，但是进程控制块尚未注销</td>
-</tr>
-<tr>
-<td align="left">TASK_DEAD</td>
-<td align="center">退出状态</td>
-</tr>
-<tr>
-<td align="left">TASK_IDLE</td>
-<td align="center">空闲状态</td>
-</tr>
-<tr>
-<td align="left">更多状态请查看: <a href="https://elixir.bootlin.com/linux/v5.2.11/source/include/linux/sched.h#L72" target="_blank" rel="noopener">进程状态</a></td>
-<td align="center"></td>
-</tr>
-</tbody></table>
-<p><em>进程运行中状态切换图</em><br><img src="/2019/09/01/进程/process.jpg" alt="进程状态流转图"></p>
 
     </div>
 
@@ -439,7 +422,7 @@
     <strong>本文作者： </strong>xblibo</li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://xblibo.com/2019/09/01/进程/" title="进程">http://xblibo.com/2019/09/01/进程/</a>
+    <a href="http://xblibo.com/2019/09/07/Linux调度算法/" title="Linux调度算法">http://xblibo.com/2019/09/07/Linux调度算法/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
@@ -456,8 +439,8 @@
         </div>
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
-              <a href="/2019/08/25/DNS系统/" rel="next" title="DNS系统">
-                <i class="fa fa-chevron-left"></i> DNS系统
+              <a href="/2019/09/07/调度算法/" rel="next" title="调度算法">
+                <i class="fa fa-chevron-left"></i> 调度算法
               </a>
             
           </div>
@@ -465,10 +448,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-              <a href="/2019/09/07/调度算法/" rel="prev" title="调度算法">
-                调度算法 <i class="fa fa-chevron-right"></i>
-              </a>
-            
           </div>
         </div>
     </footer>
@@ -585,7 +564,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#进程的概念"><span class="nav-number">1.</span> <span class="nav-text">进程的概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程的创建"><span class="nav-number">2.</span> <span class="nav-text">进程的创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程的销毁"><span class="nav-number">3.</span> <span class="nav-text">进程的销毁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程的状态"><span class="nav-number">4.</span> <span class="nav-text">进程的状态</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux调度器"><span class="nav-number">1.</span> <span class="nav-text">Linux调度器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#O-1-调度器"><span class="nav-number">2.</span> <span class="nav-text">O(1)调度器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#优先级"><span class="nav-number">2.1.</span> <span class="nav-text">优先级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#时间片"><span class="nav-number">2.2.</span> <span class="nav-text">时间片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调度流程"><span class="nav-number">2.3.</span> <span class="nav-text">调度流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CFS调度器"><span class="nav-number">3.</span> <span class="nav-text">CFS调度器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#优先级-1"><span class="nav-number">3.1.</span> <span class="nav-text">优先级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#时间片-1"><span class="nav-number">3.2.</span> <span class="nav-text">时间片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调度流程-1"><span class="nav-number">3.3.</span> <span class="nav-text">调度流程</span></a></li></ol></li></ol></div>
             
 
           </div>

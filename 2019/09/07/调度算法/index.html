@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next pisces" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+      
+    
+      
+    
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/blue/pace-theme-minimal.min.css">
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":true,"scrollpercent":true},
+    copycode: {"enable":true,"show_result":true,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: 'OT85Z6FEJT',
+      apiKey: '086df7e86c3065d3181fed31ec5b888c',
+      indexName: 'xblibo blog',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    search: {
+      root: '/',
+      path: 'search.xml'
+    },
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="调度概念在操作系统中调度是指一种资源分配，因而调度算法是指：根据系统的资源分配策略所规定的资源分配算法。对于不同的的系统和系统目标，通常采用不同的调度算法，例如，在批处理系统中，为了照顾为数众多的段作业，应采用短作业优先的调度算法；又如在分时系统中，为了保证系统具有合理的响应时间，应当采用轮转法进行调度。目前存在的多种调度算法中，有的算法适用于作业调度，有的算法适用于进程调度；但也有些调度算法既可">
+<meta name="keywords" content="操作系统 linux进程调度">
+<meta property="og:type" content="article">
+<meta property="og:title" content="调度算法">
+<meta property="og:url" content="http://xblibo.com/2019/09/07/调度算法/index.html">
+<meta property="og:site_name" content="xblibo&#39;s博客">
+<meta property="og:description" content="调度概念在操作系统中调度是指一种资源分配，因而调度算法是指：根据系统的资源分配策略所规定的资源分配算法。对于不同的的系统和系统目标，通常采用不同的调度算法，例如，在批处理系统中，为了照顾为数众多的段作业，应采用短作业优先的调度算法；又如在分时系统中，为了保证系统具有合理的响应时间，应当采用轮转法进行调度。目前存在的多种调度算法中，有的算法适用于作业调度，有的算法适用于进程调度；但也有些调度算法既可">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-09-07T13:11:42.318Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="调度算法">
+<meta name="twitter:description" content="调度概念在操作系统中调度是指一种资源分配，因而调度算法是指：根据系统的资源分配策略所规定的资源分配算法。对于不同的的系统和系统目标，通常采用不同的调度算法，例如，在批处理系统中，为了照顾为数众多的段作业，应采用短作业优先的调度算法；又如在分时系统中，为了保证系统具有合理的响应时间，应当采用轮转法进行调度。目前存在的多种调度算法中，有的算法适用于作业调度，有的算法适用于进程调度；但也有些调度算法既可">
+  <link rel="canonical" href="http://xblibo.com/2019/09/07/调度算法/">
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>调度算法 | xblibo's博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xblibo's博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+    <ul id="menu" class="menu">
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+    </ul>
+</nav>
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://xblibo.com/2019/09/07/调度算法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xblibo">
+      <meta itemprop="description" content="学习，总结，分享">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xblibo's博客">
+    </span>
+      <header class="post-header">
+
+        
+          <h1 class="post-title" itemprop="name headline">调度算法
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-07 19:58:17 / 修改时间：21:11:42" itemprop="dateCreated datePublished" datetime="2019-09-07T19:58:17+08:00">2019-09-07</time>
+            </span>
+          
+            
+
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/操作系统/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon"
+              >
+                <i class="fa fa-eye"></i>
+                 阅读次数： 
+                <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+              </span>
+            </span>
+          <br>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">本文字数：</span>
+              
+              <span title="本文字数">1.9k</span>
+            </span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              
+              <span title="阅读时长">2 分钟</span>
+            </span>
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="调度概念"><a href="#调度概念" class="headerlink" title="调度概念"></a>调度概念</h2><p>在操作系统中调度是指一种资源分配，因而调度算法是指：根据系统的资源分配策略所规定的资源分配算法。对于不同的的系统和系统目标，通常采用不同的调度算法，例如，在批处理系统中，为了照顾为数众多的段作业，应采用短作业优先的调度算法；又如在分时系统中，为了保证系统具有合理的响应时间，应当采用轮转法进行调度。目前存在的多种调度算法中，有的算法适用于作业调度，有的算法适用于进程调度；但也有些调度算法既可以用于作业调度，也可以用于进程调度。</p>
+<a id="more"></a>
+
+<h2 id="调度原则"><a href="#调度原则" class="headerlink" title="调度原则"></a>调度原则</h2><p>从系统角度来说，高性能，公平公正<br>用户角度：响应快，周转短</p>
+<h2 id="调度算法分类"><a href="#调度算法分类" class="headerlink" title="调度算法分类"></a>调度算法分类</h2><h3 id="先来先服务-FCFS"><a href="#先来先服务-FCFS" class="headerlink" title="先来先服务(FCFS)"></a>先来先服务(FCFS)</h3><p>先来先服务(FCFS)调度算法是从就绪队列中选择一个最先进入该队列的进程分配CPU运行。直到完成或发生某事件而阻塞时，才释放CPU</p>
+<p>优缺点：FCFS调度算法的特点是算法简单。但效率低，对长作业比较有利，但对短作业不利（相对SJF和高响应比）；有利于CPU繁忙型作业，而不利于I/O繁忙型作业。</p>
+<h3 id="短作业优先"><a href="#短作业优先" class="headerlink" title="短作业优先"></a>短作业优先</h3><p>短作业优先(SJF)调度算法是从就绪队列中选择一个估计运行时间最短的进程分配CPU运行，直到完成或发生某事件而阻塞时，才释放CPU。</p>
+<p>优缺点：SJF平均等待时间和周转时间短。但需要事先预知作业的运行时间，对长作业非常不利，未考虑紧迫程度，因此不能保证紧迫性作业得到及时解决，采用短作业优先调度算法无法实现人机交互。</p>
+<h3 id="优先级调度算法"><a href="#优先级调度算法" class="headerlink" title="优先级调度算法"></a>优先级调度算法</h3><p>优先级调度算法中的优先级用于描述进程运行的紧迫程度,该算法从就绪队列中选择优先级最髙的进程分配CPU运行。</p>
+<h4 id="非抢占式优先级调度算法"><a href="#非抢占式优先级调度算法" class="headerlink" title="非抢占式优先级调度算法"></a>非抢占式优先级调度算法</h4><p>系统把CPU分配给就绪队列中优先权最高的进程执行后，直到完成或发生某事件而阻塞时，才释放CPU。系统方可再将CPU重新分配给另一优先权最高的进程。这种调度算法主要用于批处理系统中；也可用于某些对实时性要求不严的实时系统中。</p>
+<h4 id="抢占式优先级调度算法"><a href="#抢占式优先级调度算法" class="headerlink" title="抢占式优先级调度算法"></a>抢占式优先级调度算法</h4><p>系统把CPU分配给就绪队列中优先权最高的进程执行后，在其执行期间，只要又出现了另一个其优先权更高的进程，进程调度程序就立即停止当前进程(原优先权最高的进程)的执行，重新将CPU分配给新到的优先权最高的进程。这种抢占式的优先权调度算法能更好地满足紧迫作业的要求，故而常用于要求比较严格的实时系统中，以及对性能要求较高的批处理和分时系统中。</p>
+<h4 id="高响应比优先调度算法"><a href="#高响应比优先调度算法" class="headerlink" title="高响应比优先调度算法"></a>高响应比优先调度算法</h4><p>高响应比优先调度算法主要用于作业调度，该算法是对FCFS调度算法和SJF调度算法的一种综合平衡，同时考虑每个作业的等待时间和估计的运行时间。在每次进行作业调度时，先计算后备作业队列中每个作业的响应比，从中选出响应比最高的进程分配CPU运行。</p>
+<p> $$ 优先级 = \dfrac{等待时间 + 预计运行时间}{预计运行时间} $$</p>
+<h3 id="时间片的轮转调度算法"><a href="#时间片的轮转调度算法" class="headerlink" title="时间片的轮转调度算法"></a>时间片的轮转调度算法</h3><p>时间片轮转调度算法主要适用于分时系统。在这种算法中，系统将所有就绪进程按到达时间的先后次序排成一个队列，进程调度程序总是选择就绪队列中第一个进程执行，即先来先服务的原则，但仅能运行一个时间片，如100ms。在使用完一个时间片后，即使进程并未完成其运行，它也必须释放出（被剥夺）处理机给下一个就绪的进程，而被剥夺的进程返回到就绪队列的末尾重新排队，等候再次运行。</p>
+<h3 id="最短剩余时间优先算法"><a href="#最短剩余时间优先算法" class="headerlink" title="最短剩余时间优先算法"></a>最短剩余时间优先算法</h3><p>最短剩余时间优先(Shortest Remaining Time Next，SRTN)调度算法多用于剥夺式的调度中。在进程调度中，每次调度时，系统把CPU分配给就绪队列中运行完所需时间最短的进程。<br>最短剩余时间优先算法也可用于不剥夺式调度方式中，此时退化为短作业优先算法。</p>
+<h3 id="多级反馈队列调度算法"><a href="#多级反馈队列调度算法" class="headerlink" title="多级反馈队列调度算法"></a>多级反馈队列调度算法</h3><p>多级反馈队列调度算法是时间片轮转调度算法和优先级调度算法的综合和发展，通过动态调整进程优先级和时间片大小，多级反馈队列调度算法可以兼顾多方面的系统目标。例如，为提高系统吞吐量和缩短平均周转时间而照顾短进程；为获得较好的I/O设备利用率和缩短响应时间而照顾I/O型进程；同时，也不必事先估计进程的执行时间。</p>
+<p>实现思路：</p>
+<ol>
+<li>设置多个就绪队列，并为各个队列赋予由高到底的优先级</li>
+<li>赋予各个队列中进程执行时间片由短到长。有限级别高的队列对应的时间片短。</li>
+<li>新进程先放入第1级队列的末尾，按FCFS原则排队等待调度。时间片结束未完成则放入下一级优先队列的末尾。</li>
+<li>仅当优先级高的队列为空时，调度程序才调度下一个优先级的队列中进程。</li>
+</ol>
+<h3 id="算法比较"><a href="#算法比较" class="headerlink" title="算法比较"></a>算法比较</h3><table>
+<thead>
+<tr>
+<th align="left">比较项</th>
+<th align="center">调度方式</th>
+<th align="center">吞吐量</th>
+<th align="center">响应时间</th>
+<th align="center">开销</th>
+<th align="center">作业类型偏好</th>
+<th align="center">饥饿问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">先来先服务</td>
+<td align="center">非抢占</td>
+<td align="center">一般</td>
+<td align="center">可能很高</td>
+<td align="center">最小</td>
+<td align="center">不利于短作业，IO频繁</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="left">短作业优先</td>
+<td align="center">非抢占</td>
+<td align="center">高</td>
+<td align="center">短作业进程高</td>
+<td align="center">高</td>
+<td align="center">不礼运长作业</td>
+<td align="center">可能</td>
+</tr>
+<tr>
+<td align="left">优先级调度</td>
+<td align="center">可抢可不抢</td>
+<td align="center">一般</td>
+<td align="center">可能高</td>
+<td align="center">一般</td>
+<td align="center">实时进程</td>
+<td align="center">可能</td>
+</tr>
+<tr>
+<td align="left">高响应比优先</td>
+<td align="center">非抢占</td>
+<td align="center">高</td>
+<td align="center">较好</td>
+<td align="center">高</td>
+<td align="center">较均衡</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="left">时间片轮转</td>
+<td align="center">抢占式</td>
+<td align="center">低</td>
+<td align="center">短作业高</td>
+<td align="center">低</td>
+<td align="center">公平对待</td>
+<td align="center">无</td>
+</tr>
+<tr>
+<td align="left">最短剩余时间</td>
+<td align="center">抢占式</td>
+<td align="center">高</td>
+<td align="center">较好</td>
+<td align="center">高</td>
+<td align="center">不利于长作业</td>
+<td align="center">可能</td>
+</tr>
+<tr>
+<td align="left">多级反馈队列</td>
+<td align="center">抢占式</td>
+<td align="center">一般</td>
+<td align="center">一般</td>
+<td align="center">高</td>
+<td align="center">利于IO频繁作业</td>
+<td align="center">可能</td>
+</tr>
+</tbody></table>
+
+    </div>
+
+    
+    
+    
+      <div>
+        
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>xblibo</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://xblibo.com/2019/09/07/调度算法/" title="调度算法">http://xblibo.com/2019/09/07/调度算法/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+
+    <footer class="post-footer">
+          
+        
+        <div class="post-tags">
+            <a href="/tags/操作系统-linux进程调度/" rel="tag"><i class="fa fa-tag"></i> 操作系统 linux进程调度</a>
+          
+        </div>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+              <a href="/2019/09/01/进程/" rel="next" title="进程">
+                <i class="fa fa-chevron-left"></i> 进程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+              <a href="/2019/09/07/Linux调度算法/" rel="prev" title="Linux调度算法">
+                Linux调度算法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">xblibo</p>
+  <div class="site-description motion-element" itemprop="description">学习，总结，分享</div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+
+
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#调度概念"><span class="nav-number">1.</span> <span class="nav-text">调度概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调度原则"><span class="nav-number">2.</span> <span class="nav-text">调度原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调度算法分类"><span class="nav-number">3.</span> <span class="nav-text">调度算法分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#先来先服务-FCFS"><span class="nav-number">3.1.</span> <span class="nav-text">先来先服务(FCFS)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#短作业优先"><span class="nav-number">3.2.</span> <span class="nav-text">短作业优先</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优先级调度算法"><span class="nav-number">3.3.</span> <span class="nav-text">优先级调度算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#非抢占式优先级调度算法"><span class="nav-number">3.3.1.</span> <span class="nav-text">非抢占式优先级调度算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#抢占式优先级调度算法"><span class="nav-number">3.3.2.</span> <span class="nav-text">抢占式优先级调度算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#高响应比优先调度算法"><span class="nav-number">3.3.3.</span> <span class="nav-text">高响应比优先调度算法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#时间片的轮转调度算法"><span class="nav-number">3.4.</span> <span class="nav-text">时间片的轮转调度算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最短剩余时间优先算法"><span class="nav-number">3.5.</span> <span class="nav-text">最短剩余时间优先算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多级反馈队列调度算法"><span class="nav-number">3.6.</span> <span class="nav-text">多级反馈队列调度算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法比较"><span class="nav-number">3.7.</span> <span class="nav-text">算法比较</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xblibo</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    
+    <span title="站点总字数">8k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    
+    <span title="站点阅读时长">7 分钟</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+    <span class="post-meta-divider">|</span>
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  <script src="/js/utils.js?v=7.3.0"></script>
+
+  
+  <script src="/js/affix.js?v=7.3.0"></script>
+  <script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script>
+<script src="/js/post-details.js?v=7.3.0"></script>
+
+
+
+  <script src="/js/next-boot.js?v=7.3.0"></script>
+
+  
+  <script src="/js/js.cookie.js?v=7.3.0"></script>
+  <script src="/js/scroll-cookie.js?v=7.3.0"></script>
+
+  
+
+  
+
+
+  
+
+
+
+
+
+  
+    
+      <script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if ($('body').find('pre.mermaid').length) {
+  $.ajax({
+    type: 'GET',
+    url: '//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js',
+    dataType: 'script',
+    cache: true,
+    success: function() {
+      mermaid.initialize({
+        theme: 'forest',
+        logLevel: 3,
+        flowchart: { curve: 'linear' },
+        gantt: { axisFormat: '%m/%d/%Y' },
+        sequence: { actorMargin: 50 }
+      });
+    }
+  });
+}
+</script>
+
+
+
+
+</body>
+</html>
