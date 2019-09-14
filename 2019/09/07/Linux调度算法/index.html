@@ -71,7 +71,7 @@
 <meta property="og:site_name" content="xblibo&#39;s博客">
 <meta property="og:description" content="Linux调度器Linux 2.4内核提供了基于时间片轮转的动态优先级调度算法。多个CPU共享一个就绪队列，基于epoch分配时间片，每次调度需要迭代整个就绪队列，选择出优先级最高的进程运行。调度过程中的迭代时间复杂度为O(N)，又称为O(N)调度器。 Linux 2.6早期版本通过优化的数据结构解决了O(N)的问题。每个cpu维护一个运行队列，扩展性更好。支持静态优先级和动态优先级。静态优先级用">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-09-13T15:17:44.473Z">
+<meta property="og:updated_time" content="2019-09-14T01:33:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux调度算法">
 <meta name="twitter:description" content="Linux调度器Linux 2.4内核提供了基于时间片轮转的动态优先级调度算法。多个CPU共享一个就绪队列，基于epoch分配时间片，每次调度需要迭代整个就绪队列，选择出优先级最高的进程运行。调度过程中的迭代时间复杂度为O(N)，又称为O(N)调度器。 Linux 2.6早期版本通过优化的数据结构解决了O(N)的问题。每个cpu维护一个运行队列，扩展性更好。支持静态优先级和动态优先级。静态优先级用">
@@ -279,7 +279,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-09-13 23:17:44" itemprop="dateModified" datetime="2019-09-13T23:17:44+08:00">2019-09-13</time>
+                <time title="修改时间：2019-09-14 09:33:12" itemprop="dateModified" datetime="2019-09-14T09:33:12+08:00">2019-09-14</time>
               </span>
             
           
@@ -316,7 +316,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span title="本文字数">2.1k</span>
+              <span title="本文字数">2.5k</span>
             </span>
           
             <span class="post-meta-item">
@@ -380,6 +380,9 @@
 </ul>
 </li>
 </ol>
+<blockquote>
+<p>时钟中断处理函数是如何注册进去的，感兴趣的可以跟下以下代码流程:<br><a href="https://elixir.bootlin.com/linux/v5.2.11/source/init/main.c#L551" target="_blank" rel="noopener">start_kernel</a> -&gt; <a href="https://elixir.bootlin.com/linux/v5.2.11/source/arch/powerpc/kernel/time.c#L1091" target="_blank" rel="noopener">init_timers</a> -&gt; <a href="https://elixir.bootlin.com/linux/v5.2.11/source/arch/powerpc/kernel/time.c#L1070" target="_blank" rel="noopener">init_decrementer_clockevent</a> -&gt; <a href="https://elixir.bootlin.com/linux/v5.2.11/source/arch/powerpc/kernel/time.c#L1010" target="_blank" rel="noopener">register_decrementer_clockevent</a> -&gt; <a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/time/clockevents.c#L505" target="_blank" rel="noopener">clockevents_config_and_register</a> -&gt; <a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/time/clockevents.c#L444" target="_blank" rel="noopener">clockevents_register_device</a> -&gt; <a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/time/tick-common.c#L338" target="_blank" rel="noopener">tick_check_new_device</a> -&gt; <a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/time/tick-common.c#L201" target="_blank" rel="noopener">tick_setup_device</a> -&gt; <a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/time/tick-common.c#L148" target="_blank" rel="noopener">tick_setup_periodic</a> -&gt; <a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/time/tick-internal.h#L87" target="_blank" rel="noopener">tick_set_periodic_handler</a></p>
+</blockquote>
 <p>二. 中断程序执行结束会执行<a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/sched/core.c#L3502" target="_blank" rel="noopener">schedule</a>，该函数执行流程:</p>
 <ol>
 <li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/sched/core.c#L3470" target="_blank" rel="noopener">sched_submit_work</a>: 检查进程状态和死锁检查器，刷新plug队列避免死锁</li>
@@ -399,7 +402,7 @@
 <li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/arch/x86/mm/tlb.c#L275" target="_blank" rel="noopener">switch_mm_irqs_off</a>: 切换页表</li>
 <li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/include/asm-generic/switch_to.h#L21" target="_blank" rel="noopener">switch_to</a>: 切换到新进程状态<ul>
 <li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/arch/x86/um/tls_32.c#L92" target="_blank" rel="noopener">load_TLS</a>: 加载新进程进程执行环境，如子进程运行时各CPU寄存器的值、子进程的kernel栈的起始地址</li>
-<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/arch/x86/kernel/process.h#L13" target="_blank" rel="noopener">switch_to_extra</a></li>
+<li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/arch/x86/kernel/process.h#L13" target="_blank" rel="noopener">switch_to_extra</a>: 切换进程堆栈，寄存器等</li>
 <li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/arch/x86/include/asm/switch_to.h#L88" target="_blank" rel="noopener">update_task_stack</a>: 更新进程内核栈</li>
 <li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/arch/x86/include/asm/switch_to.h#L76" target="_blank" rel="noopener">refresh_sysenter_cs</a></li>
 </ul>
@@ -408,6 +411,9 @@
 </li>
 <li><a href="https://elixir.bootlin.com/linux/v5.2.11/source/kernel/sched/core.c#L3496" target="_blank" rel="noopener">sched_update_worker</a></li>
 </ol>
+<blockquote>
+<p>本篇粗略了介绍Linux的调度流程，如果想了解更详细的细节，建议读者按文中源码链接好好阅读理解下源码</p>
+</blockquote>
 
     </div>
 
